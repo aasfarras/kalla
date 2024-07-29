@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Worker, Viewer } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
-import { pdfjs } from "react-pdf";
 import MainCard from "../../ui-component/cards/MainCard";
 import SubCard from "../../ui-component/cards/SubCard";
 import {
@@ -11,10 +10,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { height } from "@mui/system";
-
-// Atur path ke worker dari output build
-pdfjs.GlobalWorkerOptions.workerSrc = "/src/assets/pdf.worker.min.js"; // Path relatif ke root dari direktori build
 
 const Delivery = () => {
   const [open, setOpen] = useState(false);
@@ -23,8 +18,8 @@ const Delivery = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
-  const pdfPath1 = "/src/assets/pdf/dummy.pdf"; // Path ke PDF yang ingin Anda tampilkan
-  const pdfPath2 = "/src/assets/pdf/1.pdf"; // Path ke PDF yang ingin Anda tampilkan
+  const pdfPath1 = "/pdf/dummy.pdf";
+  const pdfPath2 = "/pdf/1.pdf";
 
   const handleClickOpen = (pdf) => {
     setSelectedPdf(pdf);
@@ -44,7 +39,7 @@ const Delivery = () => {
         spacing={2}
         sx={{ height: "100vh" }}
       >
-        <Worker workerUrl="/src/assets/pdf.worker.min.js">
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
           <Grid
             item
             xs={12}
