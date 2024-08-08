@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useSelector } from "react-redux";
 
 // material-ui
@@ -29,22 +31,23 @@ import AnimateButton from "../../../../ui-component/extended/AnimateButton";
 // assets
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
 import Google from "../../../../assets/images/icons/social-google.svg";
 
-// ============================|| FIREBASE - LOGIN ||============================ //
+// ============================|| AUTH - LOGIN ||============================ //
 
 const AuthLogin = ({ ...others }) => {
   const theme = useTheme();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
+  // const matchDownSM = useMediaQuery(theme.breakpoints.down("md"));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState(""); // State for login error
+  const navigate = useNavigate();
 
   const googleHandler = async () => {
     console.error("Login");
   };
 
-  const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -53,94 +56,57 @@ const AuthLogin = ({ ...others }) => {
     event.preventDefault();
   };
 
+  const handleLogin = async (values, setSubmitting) => {
+    try {
+      const response = await axios.post(
+        "https://api.agang-toyota.my.id/api/login",
+        {
+          username: values.username,
+          password: values.password,
+        }
+      );
+
+      if (response.data.code === 200) {
+        // Simpan token di localStorage atau context
+        localStorage.setItem("token", response.data.data.access_token);
+
+        // Redirect ke halaman utama
+        navigate("/customer/delivery");
+      } else {
+        // Set error message if login fails
+        setLoginError("Username atau Password salah");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      setLoginError("Login gagal. Silakan coba lagi.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
-          <AnimateButton>
-            <Button
-              disableElevation
-              fullWidth
-              onClick={googleHandler}
-              size="large"
-              variant="outlined"
-              sx={{
-                color: "grey.700",
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100],
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img
-                  src={Google}
-                  alt="google"
-                  width={16}
-                  height={16}
-                  style={{ marginRight: matchDownSM ? 8 : 16 }}
-                />
-              </Box>
-              Sign in with Google
-            </Button>
-          </AnimateButton>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              alignItems: "center",
-              display: "flex",
-            }}
-          >
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-            <Button
-              variant="outlined"
-              sx={{
-                cursor: "unset",
-                m: 2,
-                py: 0.5,
-                px: 7,
-                borderColor: `${theme.palette.grey[100]} !important`,
-                color: `${theme.palette.grey[900]}!important`,
-                fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`,
-              }}
-              disableRipple
-              disabled
-            >
-              OR
-            </Button>
-
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-          </Box>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          container
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Grid item container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">
-              Sign in with Email address
-            </Typography>
+            <Typography variant="subtitle1">Sign in with Username</Typography>
           </Box>
         </Grid>
       </Grid>
 
       <Formik
         initialValues={{
-          email: "",
+          username: "",
           password: "",
           submit: null,
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email("Must be a valid email")
-            .max(255)
-            .required("Email is required"),
+          username: Yup.string().max(255).required("Username is required"),
           password: Yup.string().max(255).required("Password is required"),
         })}
+        onSubmit={(values, { setSubmitting }) => {
+          handleLogin(values, setSubmitting);
+        }}
       >
         {({
           errors,
@@ -154,28 +120,27 @@ const AuthLogin = ({ ...others }) => {
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl
               fullWidth
-              error={Boolean(touched.email && errors.email)}
+              error={Boolean(touched.username && errors.username)}
               sx={{ ...theme.typography.customInput }}
             >
-              <InputLabel htmlFor="outlined-adornment-email-login">
-                Email Address / Username
+              <InputLabel htmlFor="outlined-adornment-username-login">
+                Username
               </InputLabel>
               <OutlinedInput
-                id="outlined-adornment-email-login"
-                type="email"
-                value={values.email}
-                name="email"
+                id="outlined-adornment-username-login"
+                type="text"
+                value={values.username}
+                name="username"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                label="Email Address / Username"
-                inputProps={{}}
+                label="Username"
               />
-              {touched.email && errors.email && (
+              {touched.username && errors.username && (
                 <FormHelperText
                   error
-                  id="standard-weight-helper-text-email-login"
+                  id="standard-weight-helper-text-username-login"
                 >
-                  {errors.email}
+                  {errors.username}
                 </FormHelperText>
               )}
             </FormControl>
@@ -209,7 +174,6 @@ const AuthLogin = ({ ...others }) => {
                   </InputAdornment>
                 }
                 label="Password"
-                inputProps={{}}
               />
               {touched.password && errors.password && (
                 <FormHelperText
@@ -220,31 +184,11 @@ const AuthLogin = ({ ...others }) => {
                 </FormHelperText>
               )}
             </FormControl>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              spacing={1}
-            >
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checked}
-                    onChange={(event) => setChecked(event.target.checked)}
-                    name="checked"
-                    color="primary"
-                  />
-                }
-                label="Remember me"
-              />
-              <Typography
-                variant="subtitle1"
-                color="secondary"
-                sx={{ textDecoration: "none", cursor: "pointer" }}
-              >
-                Forgot Password?
-              </Typography>
-            </Stack>
+            {loginError && (
+              <Box sx={{ mt: 2 }}>
+                <FormHelperText error>{loginError}</FormHelperText>
+              </Box>
+            )}
             {errors.submit && (
               <Box sx={{ mt: 3 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>

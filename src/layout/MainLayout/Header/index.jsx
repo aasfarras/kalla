@@ -16,6 +16,7 @@ import ProfileSection from "./ProfileSection";
 // assets
 import { IconMenu2 } from "@tabler/icons-react";
 import { height, width } from "@mui/system";
+import { Typography } from "@mui/material";
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -66,8 +67,14 @@ const Header = ({ handleLeftDrawerToggle }) => {
       </Box>
 
       {/* header search */}
-      <SearchSection />
-      <Box sx={{ flexGrow: 1 }} />
+      <Box sx={{ ml: { xs: 2, md: 5 } }}>
+        <Typography sx={{ fontSize: { xs: 11, md: 14 }, mb: { xs: 0.5 } }}>
+          Selamat Datang, AGANG TOYOTA!
+        </Typography>
+        <Typography variant="h4" sx={{ fontSize: { xs: 12, md: 16 } }}>
+          KALLA GOWA PERSONAL GUIDE
+        </Typography>
+      </Box>
       <Box sx={{ flexGrow: 1 }} />
 
       {/* notification & profile */}

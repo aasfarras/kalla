@@ -1,13 +1,15 @@
 import { lazy } from "react";
-
-// project imports
-import MainLayout from "../layout/MainLayout";
 import Loadable from "../ui-component/Loadable";
+import MainLayout from "../layout/MainLayout";
+import AuthGuard from "../utils/AuthGuard"; // Import AuthGuard
 
-// dashboard routing
+// halaman utama
 const Delivery = Loadable(lazy(() => import("../views/customer/delivery")));
 const Service = Loadable(lazy(() => import("../views/customer/service")));
 const VehicleDoc = Loadable(lazy(() => import("../views/customer/vehicleDoc")));
+const VehicleDetail = Loadable(
+  lazy(() => import("../views/customer/vehicleDetail"))
+); // Import VehicleDetail
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -17,32 +19,46 @@ const MainRoutes = {
   children: [
     {
       path: "/",
-      element: <Delivery />,
+      element: (
+        <AuthGuard>
+          <Delivery />
+        </AuthGuard>
+      ),
     },
     {
       path: "customer",
       children: [
         {
           path: "delivery",
-          element: <Delivery />,
+          element: (
+            <AuthGuard>
+              <Delivery />
+            </AuthGuard>
+          ),
         },
-      ],
-    },
-    {
-      path: "customer",
-      children: [
         {
-          path: "Service",
-          element: <Service />,
+          path: "service",
+          element: (
+            <AuthGuard>
+              <Service />
+            </AuthGuard>
+          ),
         },
-      ],
-    },
-    {
-      path: "customer",
-      children: [
         {
           path: "vehicleDoc",
-          element: <VehicleDoc />,
+          element: (
+            <AuthGuard>
+              <VehicleDoc />
+            </AuthGuard>
+          ),
+        },
+        {
+          path: "vehicle/:id", // Rute baru untuk halaman detail
+          element: (
+            <AuthGuard>
+              <VehicleDetail />
+            </AuthGuard>
+          ),
         },
       ],
     },
