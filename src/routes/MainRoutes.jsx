@@ -2,14 +2,16 @@ import { lazy } from "react";
 import Loadable from "../ui-component/Loadable";
 import MainLayout from "../layout/MainLayout";
 import AuthGuard from "../utils/AuthGuard"; // Import AuthGuard
+import { element } from "prop-types";
 
 // halaman utama
-const Delivery = Loadable(lazy(() => import("../views/customer/delivery")));
+const Dashboard = Loadable(lazy(() => import("../views/customer/dashboard")));
 const Service = Loadable(lazy(() => import("../views/customer/service")));
 const VehicleDoc = Loadable(lazy(() => import("../views/customer/vehicleDoc")));
 const VehicleDetail = Loadable(
   lazy(() => import("../views/customer/vehicleDetail"))
-); // Import VehicleDetail
+);
+const About = Loadable(lazy(() => import("../views/other/about")));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -21,7 +23,7 @@ const MainRoutes = {
       path: "/",
       element: (
         <AuthGuard>
-          <Delivery />
+          <Dashboard />
         </AuthGuard>
       ),
     },
@@ -29,10 +31,10 @@ const MainRoutes = {
       path: "customer",
       children: [
         {
-          path: "delivery",
+          path: "dashboard",
           element: (
             <AuthGuard>
-              <Delivery />
+              <Dashboard />
             </AuthGuard>
           ),
         },
@@ -57,6 +59,19 @@ const MainRoutes = {
           element: (
             <AuthGuard>
               <VehicleDetail />
+            </AuthGuard>
+          ),
+        },
+      ],
+    },
+    {
+      path: "other",
+      children: [
+        {
+          path: "about",
+          element: (
+            <AuthGuard>
+              <About />
             </AuthGuard>
           ),
         },

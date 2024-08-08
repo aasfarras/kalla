@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MainCard from "../../ui-component/cards/MainCard";
 import SubCard from "../../ui-component/cards/SubCard";
 import { Grid, Typography } from "@mui/material";
-import { getDelivery } from "../../service/delivery.service";
+import { getVehicle } from "../../service/vehicle.service";
 
 const VehicleDoc = () => {
   const [imageData, setImageData] = useState([]); // State untuk menyimpan data gambar
@@ -11,13 +11,23 @@ const VehicleDoc = () => {
 
   useEffect(() => {
     // Mengambil data dari API
-    getDelivery((data) => {
+    getVehicle((data) => {
       setImageData(data);
     });
   }, []);
 
   const handleCardClick = (id) => {
     navigate(`/customer/vehicle/${id}`);
+  };
+
+  const handleClickOpen = (image) => {
+    setSelectedImage(image);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedImage(null);
   };
 
   return (

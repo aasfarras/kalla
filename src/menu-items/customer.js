@@ -17,11 +17,11 @@ const customer = {
   type: "group",
   children: [
     {
-      id: "delivery",
-      title: "Delivery",
+      id: "dashboard",
+      title: "Dashboard",
       type: "item",
-      url: "/customer/delivery",
-      icon: icons.IconCar,
+      url: "/customer/dashboard",
+      icon: icons.IconDashboard,
       breadcrumbs: false,
     },
     {

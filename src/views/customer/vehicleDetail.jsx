@@ -11,7 +11,7 @@ import {
   Box,
   IconButton,
 } from "@mui/material";
-import { getDelivery } from "../../service/delivery.service";
+import { getVehicle } from "../../service/vehicle.service";
 import { useTheme } from "@emotion/react";
 import DownloadIcon from "@mui/icons-material/Download"; // Import ikon download
 
@@ -32,7 +32,7 @@ const VehicleDetail = () => {
   });
 
   useEffect(() => {
-    getDelivery((data) => {
+    getVehicle((data) => {
       const selectedVehicle = data.find((item) => item.id === parseInt(id));
       setVehicle(selectedVehicle);
     });

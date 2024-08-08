@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getDelivery = (callback) => {
+export const getVehicle = (callback) => {
   const token = localStorage.getItem("token"); // Asumsikan token disimpan di localStorage
 
   axios
@@ -13,6 +13,6 @@ export const getDelivery = (callback) => {
       callback(res.data.data);
     })
     .catch((err) => {
-      console.error("Error fetching delivery data:", err);
+      console.error("Error fetching vehicle data:", err);
     });
 };

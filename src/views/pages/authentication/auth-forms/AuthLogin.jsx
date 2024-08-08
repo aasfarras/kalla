@@ -71,7 +71,7 @@ const AuthLogin = ({ ...others }) => {
         localStorage.setItem("token", response.data.data.access_token);
 
         // Redirect ke halaman utama
-        navigate("/customer/delivery");
+        navigate("/customer/dashboard");
       } else {
         // Set error message if login fails
         setLoginError("Username atau Password salah");

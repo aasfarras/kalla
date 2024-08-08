@@ -1,26 +1,12 @@
-import MUIDataTable from "mui-datatables";
+import { Typography } from "@mui/material";
+import MainCard from "../../ui-component/cards/MainCard";
 
-const columns = ["Name", "Company", "City", "State"];
-
-const delivery = () => {
-  const data = [
-    ["Joe James", "Test Corp", "Yonkers", "NY"],
-    ["John Walsh", "Test Corp", "Hartford", "CT"],
-    ["Bob Herm", "Test Corp", "Tampa", "FL"],
-    ["James Houston", "Test Corp", "Dallas", "TX"],
-  ];
-
-  const options = {
-    filterType: "checkbox",
-  };
+const About = () => {
   return (
-    <MUIDataTable
-      title={"Employee List"}
-      data={data}
-      columns={columns}
-      options={options}
-    />
+    <MainCard title="about">
+      <Typography>coming soon</Typography>
+    </MainCard>
   );
 };
 
-export default delivery;
+export default About;
