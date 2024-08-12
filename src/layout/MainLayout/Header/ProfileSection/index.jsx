@@ -53,13 +53,9 @@ const ProfileSection = () => {
         }
       );
 
-      console.log("Logout response:", response.data);
-
       if (response.data.code === 200) {
-        // Hapus token dari localStorage
         localStorage.removeItem("token");
 
-        // Redirect ke halaman login
         navigate("/login");
       } else {
         console.error("Logout failed:", response.data.message);

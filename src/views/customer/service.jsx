@@ -12,7 +12,7 @@ import MainCard from "../../ui-component/cards/MainCard";
 import { postService } from "../../service/service.service";
 import { useTheme } from "@emotion/react";
 
-const Service = ({ userId }) => {
+const ServiceForm = ({ userId, handleClose, onSubmitSuccess }) => {
   const theme = useTheme();
 
   const [formData, setFormData] = useState({
@@ -29,32 +29,21 @@ const Service = ({ userId }) => {
 
   const handleSubmit = () => {
     const serviceData = {
-      customer_id: userId, // Menggunakan id user yang sedang login
+      customer_id: userId,
       service_type: formData.serviceType,
       vehicle_model: formData.vehicleType,
       police_number: formData.policeNumber,
     };
 
     postService(serviceData, (data) => {
-      console.log("Order Service Success:", data);
-      // Tindakan setelah berhasil memesan
-      alert("Service berhasil dipesan!");
+      onSubmitSuccess(); // Call the callback to update the list
+      handleClose(); // Close the modal
     });
   };
 
   return (
-    <MainCard title="Service">
+    <MainCard title="Add New Service">
       <Grid container direction="column" spacing={3}>
-        <Grid item>
-          <TextField
-            required
-            label="Nomor Whatsapp"
-            name="whatsapp"
-            value={formData.whatsapp}
-            onChange={handleChange}
-            sx={{ width: "100%" }}
-          />
-        </Grid>
         <Grid item>
           <TextField
             required
@@ -120,4 +109,4 @@ const Service = ({ userId }) => {
   );
 };
 
-export default Service;
+export default ServiceForm;

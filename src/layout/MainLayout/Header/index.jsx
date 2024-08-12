@@ -9,7 +9,7 @@ import ButtonBase from "@mui/material/ButtonBase";
 // project imports
 import LogoSection from "../LogoSection";
 import Logo from "../../../assets/images/logo-kalla.png";
-import SearchSection from "./SearchSection";
+
 // import NotificationSection from "./NotificationSection";
 import ProfileSection from "./ProfileSection";
 

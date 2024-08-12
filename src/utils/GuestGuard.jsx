@@ -4,7 +4,7 @@ const GuestGuard = ({ children }) => {
   const isLoggedIn = !!localStorage.getItem("token");
 
   if (isLoggedIn) {
-    return <Navigate to="/customer/delivery" />;
+    return <Navigate to="/customer/dashboard" />;
   }
 
   return children;

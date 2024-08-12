@@ -1,43 +1,275 @@
-import React from "react";
-import MainCard from "../../ui-component/cards/MainCard";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
-  Typography,
   Card,
+  CardContent,
+  Typography,
+  Divider,
   CardMedia,
-  useMediaQuery,
   useTheme,
+  useMediaQuery,
+  Tooltip,
+  IconButton,
+  Button,
 } from "@mui/material";
-
-// Import gambar
+import MainCard from "../../ui-component/cards/MainCard";
+import SubCard from "../../ui-component/cards/SubCard";
+import { getVehicle } from "../../service/vehicle.service";
+import Carousel from "react-material-ui-carousel";
 import image1 from "../../assets/images/edukasi.jpeg";
 import image2 from "../../assets/images/edukasi3.jpeg";
 import image3 from "../../assets/images/edukasi2.jpeg";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
-const Dashboard = () => {
+const renderStatusIcon = (url) => {
+  return url ? (
+    <CheckCircleIcon color="success" />
+  ) : (
+    <CancelIcon color="error" />
+  );
+};
+
+const VehicleList = () => {
+  const [vehicles, setVehicles] = useState([]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
-  const images = [image1, image2, image3];
+  useEffect(() => {
+    // Fetch vehicle data from API
+    getVehicle((data) => {
+      setVehicles(data);
+    });
+  }, []);
+
+  const handlePromoteNowClick = () => {
+    window.open("https://g.co/kgs/ftJfmjx", "_blank");
+  };
+
+  const handleSurveyClick = () => {
+    window.open("https://g.co/kgs/ftJfmjx", "_blank");
+  };
 
   return (
     <MainCard title="Dashboard" style={{ overflow: "auto" }}>
       <Grid container spacing={2}>
-        {images.map((image, index) => (
-          <Grid item xs={12} sm={4} key={index}>
+        {/* Left Side: Cards */}
+        <Grid item xs={12} md={7}>
+          {/* Card 1 */}
+          <SubCard
+            sx={{
+              height: "auto",
+              width: "100%",
+              overflow: "auto",
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: "bold", fontSize: "32px", mb: 2 }}
+            >
+              Upload Foto <br /> & Beri Review <br />
+              Terbaikmu!
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "16px" }}>
+              Upload Foto Anda selama berada di Dealer,berikan komentar terbaik
+              anda, & dapatkan 13 Kemudahan Pelanggan Kalla Toyota!
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Typography>
+              <Button variant="contained" onClick={handlePromoteNowClick}>
+                Promote Now
+              </Button>
+            </Typography>
+          </SubCard>
+
+          {/* Card 2 */}
+          <SubCard
+            sx={{
+              height: "auto",
+              width: "100%",
+              overflow: "auto",
+              mb: 2,
+            }}
+          >
+            <Typography
+              variant="body1"
+              sx={{ fontWeight: "bold", fontSize: "32px", mb: 2 }}
+            >
+              Isi Surveynya
+              <br /> Dapatkan Hadiahnya!
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "16px" }}>
+              Bantu kami agar dapat Memahami Kebutuhan Anda dengan baik,
+              selesaikan Survey Kepuasan Pelanggan berikut dan dapatkan Freebies
+              saat Service Pertama!
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Typography>
+              <Button variant="contained" onClick={handleSurveyClick}>
+                Survey Kepuasan Pelanggan
+              </Button>
+            </Typography>
+          </SubCard>
+        </Grid>
+        {/* Right Side: Slider and SubCards */}
+        <Grid item xs={12} md={5}>
+          {/* Image Slider */}
+          <Carousel
+            navButtonsAlwaysVisible
+            sx={{
+              width: "100%", // Adjust width as needed
+              height: "100%", // Adjust height if needed
+              mb: 2, // Margin bottom for spacing
+            }}
+          >
             <Card>
               <CardMedia
                 component="img"
                 height="100%"
-                image={image}
-                alt={`Image ${index + 1}`}
+                image={image1}
+                alt="Image 1"
               />
             </Card>
-          </Grid>
-        ))}
+            <Card>
+              <CardMedia
+                component="img"
+                height="100%"
+                image={image2}
+                alt="Image 2"
+              />
+            </Card>
+            <Card>
+              <CardMedia
+                component="img"
+                height="100%"
+                image={image3}
+                alt="Image 3"
+              />
+            </Card>
+          </Carousel>
+        </Grid>
+        {/* Divider for separating slider and subcards */}
+        <Divider sx={{ my: 2, width: "100%" }} /> {/* Full-width divider */}
+        {/* Vehicle SubCard Section */}
+        <Grid container spacing={2}>
+          {vehicles.map((vehicle) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={vehicle.id}>
+              <SubCard
+                title={vehicle.model_name}
+                sx={{
+                  border: "1px solid rgba(0, 0, 0, 0.3)",
+                  height: "100%",
+                  width: "100%",
+                  overflow: "auto",
+                  cursor: "pointer",
+                }}
+              >
+                <Typography color="textSecondary">
+                  No. Polisi: {vehicle.police_number}
+                </Typography>
+                <Grid container spacing={1} mt={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle2">Berkas:</Typography>
+                    <Grid container spacing={1}>
+                      <Grid item>
+                        <Tooltip
+                          title={
+                            vehicle.bstb
+                              ? "BSTB available"
+                              : "BSTB not available"
+                          }
+                        >
+                          <IconButton>
+                            {renderStatusIcon(vehicle.bstb)}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography>BSTB</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Tooltip
+                          title={
+                            vehicle.leasing
+                              ? "Leasing available"
+                              : "Leasing not available"
+                          }
+                        >
+                          <IconButton>
+                            {renderStatusIcon(vehicle.leasing)}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography>Leasing</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Tooltip
+                          title={
+                            vehicle.asurance
+                              ? "Asurance available"
+                              : "Asurance not available"
+                          }
+                        >
+                          <IconButton>
+                            {renderStatusIcon(vehicle.asurance)}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography>Asurance</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Tooltip
+                          title={
+                            vehicle.certificate
+                              ? "Certificate available"
+                              : "Certificate not available"
+                          }
+                        >
+                          <IconButton>
+                            {renderStatusIcon(vehicle.certificate)}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography>Certificate</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Tooltip
+                          title={
+                            vehicle.stnk
+                              ? "STNK available"
+                              : "STNK not available"
+                          }
+                        >
+                          <IconButton>
+                            {renderStatusIcon(vehicle.stnk)}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography>STNK</Typography>
+                      </Grid>
+                      <Grid item>
+                        <Tooltip
+                          title={
+                            vehicle.bpkb_status === "yes"
+                              ? "BPKB available"
+                              : "BPKB not available"
+                          }
+                        >
+                          <IconButton>
+                            {vehicle.bpkb_status === "yes" ? (
+                              <CheckCircleIcon color="success" />
+                            ) : (
+                              <CancelIcon color="error" />
+                            )}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography>BPKB</Typography>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </SubCard>
+            </Grid>
+          ))}
+        </Grid>
       </Grid>
     </MainCard>
   );
 };
 
-export default Dashboard;
+export default VehicleList;

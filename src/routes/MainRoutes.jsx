@@ -6,7 +6,9 @@ import { element } from "prop-types";
 
 // halaman utama
 const Dashboard = Loadable(lazy(() => import("../views/customer/dashboard")));
-const Service = Loadable(lazy(() => import("../views/customer/service")));
+const ServiceTabel = Loadable(
+  lazy(() => import("../views/customer/serviceTabel"))
+);
 const VehicleDoc = Loadable(lazy(() => import("../views/customer/vehicleDoc")));
 const VehicleDetail = Loadable(
   lazy(() => import("../views/customer/vehicleDetail"))
@@ -42,7 +44,7 @@ const MainRoutes = {
           path: "service",
           element: (
             <AuthGuard>
-              <Service />
+              <ServiceTabel />
             </AuthGuard>
           ),
         },

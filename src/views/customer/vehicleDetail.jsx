@@ -70,7 +70,14 @@ const VehicleDetail = () => {
       <Typography variant="body1">
         Police Number: {vehicle.police_number}
       </Typography>
-      <Typography variant="body1" sx={{ mt: 1 }}>
+      <Typography
+        variant="body1"
+        sx={{
+          mt: 1,
+          color: vehicle.bpkb_status === "yes" ? "green" : "red",
+          fontWeight: "bold",
+        }}
+      >
         BPKB Status: {vehicle.bpkb_status === "yes" ? "Yes" : "No"}
       </Typography>
 

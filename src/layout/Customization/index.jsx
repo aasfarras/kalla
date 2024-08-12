@@ -3,34 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 // material-ui
 import { useTheme } from "@mui/material/styles";
-import Drawer from "@mui/material/Drawer";
-import Fab from "@mui/material/Fab";
-import Grid from "@mui/material/Grid";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
-import RadioGroup from "@mui/material/RadioGroup";
-import Radio from "@mui/material/Radio";
-import Slider from "@mui/material/Slider";
-import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
 
-// third-party
-import PerfectScrollbar from "react-perfect-scrollbar";
-
-// project imports
-import SubCard from "../../ui-component/cards/SubCard";
-import AnimateButton from "../../ui-component/extended/AnimateButton";
 import { SET_BORDER_RADIUS, SET_FONT_FAMILY } from "../../store/actions";
-import { gridSpacing } from "../../store/constant";
-
-// assets
-import { IconSettings } from "@tabler/icons-react";
-
-// concat 'px'
-function valueText(value) {
-  return `${value}px`;
-}
 
 // ==============================|| LIVE CUSTOMIZATION ||============================== //
 

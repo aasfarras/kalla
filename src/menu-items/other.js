@@ -1,12 +1,8 @@
 // assets
-import {
-  IconCash,
-  IconFileAnalytics,
-  IconZoomExclamation,
-} from "@tabler/icons-react";
+import { IconZoomExclamation } from "@tabler/icons-react";
 
 // constant
-const icons = { IconCash, IconFileAnalytics, IconZoomExclamation };
+const icons = { IconZoomExclamation };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -17,9 +13,9 @@ const other = {
   children: [
     {
       id: "about",
-      title: "About",
+      title: "Bantuan",
       type: "item",
-      url: "/other/about",
+      url: "https://wa.me/081242789195",
       icon: icons.IconZoomExclamation,
       breadcrumbs: false,
     },
