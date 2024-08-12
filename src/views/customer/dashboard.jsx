@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Grid,
   Card,
-  CardContent,
   Typography,
   Divider,
   CardMedia,
@@ -22,8 +21,8 @@ import image3 from "../../assets/images/edukasi2.jpeg";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-const renderStatusIcon = (url) => {
-  return url ? (
+const renderStatusIcon = (status) => {
+  return status ? (
     <CheckCircleIcon color="success" />
   ) : (
     <CancelIcon color="error" />
@@ -72,8 +71,8 @@ const VehicleList = () => {
               Terbaikmu!
             </Typography>
             <Typography variant="body2" sx={{ fontSize: "16px" }}>
-              Upload Foto Anda selama berada di Dealer,berikan komentar terbaik
-              anda, & dapatkan 13 Kemudahan Pelanggan Kalla Toyota!
+              Upload Foto Anda selama berada di Dealer, berikan komentar terbaik
+              Anda, & dapatkan 13 Kemudahan Pelanggan Kalla Toyota!
             </Typography>
             <Divider sx={{ my: 2 }} />
             <Typography>
@@ -100,7 +99,7 @@ const VehicleList = () => {
               <br /> Dapatkan Hadiahnya!
             </Typography>
             <Typography variant="body2" sx={{ fontSize: "16px" }}>
-              Bantu kami agar dapat Memahami Kebutuhan Anda dengan baik,
+              Bantu kami agar dapat memahami kebutuhan Anda dengan baik,
               selesaikan Survey Kepuasan Pelanggan berikut dan dapatkan Freebies
               saat Service Pertama!
             </Typography>
@@ -154,12 +153,12 @@ const VehicleList = () => {
         {/* Vehicle SubCard Section */}
         <Grid container spacing={2}>
           {vehicles.map((vehicle) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={vehicle.id}>
+            <Grid item xs={12} key={vehicle.id}>
               <SubCard
                 title={vehicle.model_name}
                 sx={{
                   border: "1px solid rgba(0, 0, 0, 0.3)",
-                  height: "100%",
+                  height: "auto",
                   width: "100%",
                   overflow: "auto",
                   cursor: "pointer",
@@ -168,98 +167,107 @@ const VehicleList = () => {
                 <Typography color="textSecondary">
                   No. Polisi: {vehicle.police_number}
                 </Typography>
-                <Grid container spacing={1} mt={2}>
-                  <Grid item xs={12}>
-                    <Typography variant="subtitle2">Berkas:</Typography>
-                    <Grid container spacing={1}>
-                      <Grid item>
-                        <Tooltip
-                          title={
-                            vehicle.bstb
-                              ? "BSTB available"
-                              : "BSTB not available"
-                          }
-                        >
-                          <IconButton>
-                            {renderStatusIcon(vehicle.bstb)}
-                          </IconButton>
-                        </Tooltip>
-                        <Typography>BSTB</Typography>
-                      </Grid>
-                      <Grid item>
-                        <Tooltip
-                          title={
-                            vehicle.leasing
-                              ? "Leasing available"
-                              : "Leasing not available"
-                          }
-                        >
-                          <IconButton>
-                            {renderStatusIcon(vehicle.leasing)}
-                          </IconButton>
-                        </Tooltip>
-                        <Typography>Leasing</Typography>
-                      </Grid>
-                      <Grid item>
-                        <Tooltip
-                          title={
-                            vehicle.asurance
-                              ? "Asurance available"
-                              : "Asurance not available"
-                          }
-                        >
-                          <IconButton>
-                            {renderStatusIcon(vehicle.asurance)}
-                          </IconButton>
-                        </Tooltip>
-                        <Typography>Asurance</Typography>
-                      </Grid>
-                      <Grid item>
-                        <Tooltip
-                          title={
-                            vehicle.certificate
-                              ? "Certificate available"
-                              : "Certificate not available"
-                          }
-                        >
-                          <IconButton>
-                            {renderStatusIcon(vehicle.certificate)}
-                          </IconButton>
-                        </Tooltip>
-                        <Typography>Certificate</Typography>
-                      </Grid>
-                      <Grid item>
-                        <Tooltip
-                          title={
-                            vehicle.stnk
-                              ? "STNK available"
-                              : "STNK not available"
-                          }
-                        >
-                          <IconButton>
-                            {renderStatusIcon(vehicle.stnk)}
-                          </IconButton>
-                        </Tooltip>
-                        <Typography>STNK</Typography>
-                      </Grid>
-                      <Grid item>
-                        <Tooltip
-                          title={
-                            vehicle.bpkb_status === "yes"
-                              ? "BPKB available"
-                              : "BPKB not available"
-                          }
-                        >
-                          <IconButton>
-                            {vehicle.bpkb_status === "yes" ? (
-                              <CheckCircleIcon color="success" />
-                            ) : (
-                              <CancelIcon color="error" />
-                            )}
-                          </IconButton>
-                        </Tooltip>
-                        <Typography>BPKB</Typography>
-                      </Grid>
+                <Grid container spacing={2} mt={2}>
+                  {/* Row 1 */}
+                  <Grid container item xs={12} spacing={2}>
+                    <Grid item xs={4} display="flex" alignItems="center">
+                      <Tooltip
+                        title={
+                          vehicle.bstb ? "BSTB available" : "BSTB not available"
+                        }
+                      >
+                        <IconButton>
+                          {renderStatusIcon(vehicle.bstb)}
+                        </IconButton>
+                      </Tooltip>
+                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
+                        BSTB
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" alignItems="center">
+                      <Tooltip
+                        title={
+                          vehicle.leasing
+                            ? "Leasing available"
+                            : "Leasing not available"
+                        }
+                      >
+                        <IconButton>
+                          {renderStatusIcon(vehicle.leasing)}
+                        </IconButton>
+                      </Tooltip>
+                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
+                        Leasing
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" alignItems="center">
+                      <Tooltip
+                        title={
+                          vehicle.asurance
+                            ? "Asurance available"
+                            : "Asurance not available"
+                        }
+                      >
+                        <IconButton>
+                          {renderStatusIcon(vehicle.asurance)}
+                        </IconButton>
+                      </Tooltip>
+                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
+                        Asurance
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  {/* Row 2 */}
+                  <Grid container item xs={12} spacing={2}>
+                    <Grid item xs={4} display="flex" alignItems="center">
+                      <Tooltip
+                        title={
+                          vehicle.certificate
+                            ? "Certificate available"
+                            : "Certificate not available"
+                        }
+                      >
+                        <IconButton>
+                          {renderStatusIcon(vehicle.certificate)}
+                        </IconButton>
+                      </Tooltip>
+                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
+                        Certificate
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" alignItems="center">
+                      <Tooltip
+                        title={
+                          vehicle.stnk ? "STNK available" : "STNK not available"
+                        }
+                      >
+                        <IconButton>
+                          {renderStatusIcon(vehicle.stnk)}
+                        </IconButton>
+                      </Tooltip>
+                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
+                        STNK
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={4} display="flex" alignItems="center">
+                      <Tooltip
+                        title={
+                          vehicle.bpkb_status === "yes"
+                            ? "BPKB available"
+                            : "BPKB not available"
+                        }
+                      >
+                        <IconButton>
+                          {vehicle.bpkb_status === "yes" ? (
+                            <CheckCircleIcon color="success" />
+                          ) : (
+                            <CancelIcon color="error" />
+                          )}
+                        </IconButton>
+                      </Tooltip>
+                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
+                        BPKB
+                      </Typography>
                     </Grid>
                   </Grid>
                 </Grid>
