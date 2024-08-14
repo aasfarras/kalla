@@ -1,4 +1,3 @@
-// assets
 import { IconZoomExclamation } from "@tabler/icons-react";
 
 // constant
@@ -15,9 +14,11 @@ const other = {
       id: "about",
       title: "Bantuan",
       type: "item",
-      url: "https://wa.me/081242789195",
+      url: "https://wa.me/08",
       icon: icons.IconZoomExclamation,
       breadcrumbs: false,
+      target: "_blank",
+      rel: "noopener noreferrer",
     },
   ],
 };

@@ -42,11 +42,14 @@ const VehicleList = () => {
   }, []);
 
   const handlePromoteNowClick = () => {
-    window.open("https://g.co/kgs/ftJfmjx", "_blank");
+    window.open("https://maps.app.goo.gl/QNhULdx8yAu6nnM99?g_st=iw", "_blank");
   };
 
   const handleSurveyClick = () => {
-    window.open("https://g.co/kgs/ftJfmjx", "_blank");
+    window.open(
+      "https://icare.toyota.astra.co.id/Survey/V2/0A63D938",
+      "_blank"
+    );
   };
 
   return (
@@ -76,7 +79,11 @@ const VehicleList = () => {
             </Typography>
             <Divider sx={{ my: 2 }} />
             <Typography>
-              <Button variant="contained" onClick={handlePromoteNowClick}>
+              <Button
+                variant="contained"
+                onClick={handlePromoteNowClick}
+                sx={{ background: theme.palette.primary.dark }}
+              >
                 Promote Now
               </Button>
             </Typography>
@@ -105,7 +112,11 @@ const VehicleList = () => {
             </Typography>
             <Divider sx={{ my: 2 }} />
             <Typography>
-              <Button variant="contained" onClick={handleSurveyClick}>
+              <Button
+                variant="contained"
+                onClick={handleSurveyClick}
+                sx={{ background: theme.palette.primary.dark }}
+              >
                 Survey Kepuasan Pelanggan
               </Button>
             </Typography>

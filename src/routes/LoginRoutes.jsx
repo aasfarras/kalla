@@ -10,7 +10,7 @@ import Loadable from "../ui-component/Loadable";
 const AuthLogin = Loadable(
   lazy(() => import("../views/pages/authentication3/Login3"))
 );
-const Delivery = Loadable(lazy(() => import("../views/customer/dashboard")));
+// const Delivery = Loadable(lazy(() => import("../views/customer/dashboard")));
 // const AuthRegister = Loadable(
 //   lazy(() => import("../views/pages/authentication3/Register3"))
 // );
