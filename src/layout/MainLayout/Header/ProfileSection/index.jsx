@@ -4,16 +4,28 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 
 // material-ui
-import { useTheme } from "@mui/material/styles";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Chip from "@mui/material/Chip";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import List from "@mui/material/List";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import Typography from "@mui/material/Typography";
+import {
+  useTheme,
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  ClickAwayListener,
+  List,
+  Paper,
+  Popper,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  CircularProgress,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+} from "@mui/material";
 
 // third-party
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -21,7 +33,6 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 // project imports
 import MainCard from "../../../../ui-component/cards/MainCard";
 import Transitions from "../../../../ui-component/extended/Transitions";
-import User1 from "../../../../assets/images/users/user-round.svg";
 
 // assets
 import { IconLogout, IconSettings } from "@tabler/icons-react";
@@ -34,7 +45,65 @@ const ProfileSection = () => {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false); // state untuk modal
+  const [loading, setLoading] = useState(true); // state untuk loading data
+  const [profileData, setProfileData] = useState({
+    username: "",
+    name: "",
+    email: "",
+    phone: "",
+    gender: "",
+    address: "",
+    imageUrl: "",
+  });
+
   const anchorRef = useRef(null);
+
+  // Function to fetch profile data from the API
+  const fetchProfileData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await axios.get(
+        "https://api.agang-toyota.my.id/api/customer/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Check if the response is successful and has data
+      if (response.data && response.data.code === 200) {
+        const { username, name, email, phone, gender, address, imageUrl } =
+          response.data.data;
+        setProfileData({
+          username,
+          name,
+          email,
+          phone,
+          gender,
+          address,
+          imageUrl,
+        });
+      } else {
+        console.error("Failed to fetch profile:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Call fetchProfileData when the component is mounted
+  useEffect(() => {
+    fetchProfileData();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -76,6 +145,14 @@ const ProfileSection = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
+  const handleProfileOpen = () => {
+    setProfileOpen(true); // buka modal
+  };
+
+  const handleProfileClose = () => {
+    setProfileOpen(false); // tutup modal
+  };
+
   const prevOpen = useRef(open);
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
@@ -109,7 +186,7 @@ const ProfileSection = () => {
         }}
         icon={
           <Avatar
-            src={User1}
+            src={profileData.imageUrl}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: "8px 0 8px 8px !important",
@@ -186,6 +263,24 @@ const ProfileSection = () => {
                       }}
                     >
                       <Button
+                        onClick={handleProfileOpen} // ketika klik, buka modal profile
+                        startIcon={<IconSettings stroke={1.5} size="1.3rem" />}
+                        variant="text"
+                        color="inherit"
+                        sx={{
+                          borderRadius: `${customization.borderRadius}px`,
+                          textAlign: "left",
+                          padding: "12px 16px",
+                          justifyContent: "flex-start",
+                          width: "100%",
+                          "&:hover": {
+                            backgroundColor: theme.palette.action.hover,
+                          },
+                        }}
+                      >
+                        <Typography variant="body2">Profile</Typography>
+                      </Button>
+                      <Button
                         onClick={handleLogout}
                         startIcon={<IconLogout stroke={1.5} size="1.3rem" />}
                         variant="text"
@@ -211,6 +306,75 @@ const ProfileSection = () => {
           </Transitions>
         )}
       </Popper>
+
+      {/* Modal untuk Profile */}
+      <Dialog
+        open={profileOpen}
+        onClose={handleProfileClose}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>View Profile</DialogTitle>
+        <DialogContent>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              {/* Tampilkan foto profil di tengah */}
+              <Box sx={{ mb: 2 }}>
+                <Avatar
+                  src={profileData.imageUrl}
+                  sx={{ width: 120, height: 120 }}
+                />
+              </Box>
+
+              {/* Field untuk Nama */}
+              <TextField
+                label="Nama"
+                fullWidth
+                value={profileData.name}
+                disabled
+                color="error"
+              />
+
+              {/* Field untuk Phone */}
+              <TextField
+                label="Phone"
+                fullWidth
+                value={profileData.phone}
+                disabled
+              />
+
+              <TextField
+                label="Gender"
+                fullWidth
+                value={profileData.gender}
+                disabled
+              />
+
+              {/* Field untuk Address */}
+              <TextField
+                label="Address"
+                fullWidth
+                value={profileData.address}
+                disabled
+                multiline
+                rows={4}
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleProfileClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

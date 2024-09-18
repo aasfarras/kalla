@@ -36,8 +36,8 @@ const ServiceForm = ({ userId, handleClose, onSubmitSuccess }) => {
     };
 
     postService(serviceData, (data) => {
-      onSubmitSuccess(); // Call the callback to update the list
-      handleClose(); // Close the modal
+      onSubmitSuccess();
+      handleClose();
     });
   };
 
