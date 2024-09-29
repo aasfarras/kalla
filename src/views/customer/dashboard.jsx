@@ -14,6 +14,7 @@ import {
 import MainCard from "../../ui-component/cards/MainCard";
 import SubCard from "../../ui-component/cards/SubCard";
 import { getVehicle } from "../../service/vehicle.service";
+import { getDashboard } from "../../service/dashboard.service"; // Pastikan import ini benar
 import Carousel from "react-material-ui-carousel";
 import image1 from "../../assets/images/edukasi.jpeg";
 import image2 from "../../assets/images/edukasi3.jpeg";
@@ -31,6 +32,7 @@ const renderStatusIcon = (status) => {
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
+  const [surveyLink, setSurveyLink] = useState(""); // State untuk menyimpan link survey
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
@@ -39,6 +41,10 @@ const VehicleList = () => {
     getVehicle((data) => {
       setVehicles(data);
     });
+
+    getDashboard((data) => {
+      setSurveyLink(data.value); // Simpan link ke state
+    });
   }, []);
 
   const handlePromoteNowClick = () => {
@@ -46,10 +52,11 @@ const VehicleList = () => {
   };
 
   const handleSurveyClick = () => {
-    window.open(
-      "https://icare.toyota.astra.co.id/Survey/V2/0A63D938",
-      "_blank"
-    );
+    if (surveyLink) {
+      window.open(surveyLink, "_blank"); // Gunakan link dari state
+    } else {
+      console.error("Survey link is not available");
+    }
   };
 
   return (
@@ -263,17 +270,11 @@ const VehicleList = () => {
                     <Grid item xs={4} display="flex" alignItems="center">
                       <Tooltip
                         title={
-                          vehicle.bpkb_status === "yes"
-                            ? "BPKB available"
-                            : "BPKB not available"
+                          vehicle.bpkb ? "BPKB available" : "BPKB not available"
                         }
                       >
                         <IconButton>
-                          {vehicle.bpkb_status === "yes" ? (
-                            <CheckCircleIcon color="success" />
-                          ) : (
-                            <CancelIcon color="error" />
-                          )}
+                          {renderStatusIcon(vehicle.bpkb)}
                         </IconButton>
                       </Tooltip>
                       <Typography sx={{ ml: { xs: 0, md: 1 } }}>

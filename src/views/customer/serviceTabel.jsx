@@ -15,12 +15,15 @@ import {
 import MainCard from "../../ui-component/cards/MainCard";
 import ServiceForm from "./service"; // Komponen form dalam modal
 import { getTabel } from "../../service/servicetabel.service";
+import { useTheme } from "@emotion/react";
 
 const ServiceList = ({ userId }) => {
   const [open, setOpen] = useState(false);
   const [services, setServices] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const theme = useTheme();
 
   useEffect(() => {
     // Fetch data from API with pagination
@@ -63,10 +66,10 @@ const ServiceList = ({ userId }) => {
         onClick={handleOpen}
         sx={{
           mb: 2,
-          background: "#007bff",
+          background: theme.palette.secondary.light,
           color: "#fff",
           "&:hover": {
-            background: "#0056b3",
+            background: theme.palette.secondary.main,
           },
         }}
       >

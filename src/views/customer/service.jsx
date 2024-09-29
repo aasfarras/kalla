@@ -42,7 +42,7 @@ const ServiceForm = ({ userId, handleClose, onSubmitSuccess }) => {
   };
 
   return (
-    <MainCard title="Add New Service">
+    <MainCard title="Add New Servicee">
       <Grid container direction="column" spacing={3}>
         <Grid item>
           <TextField
@@ -94,10 +94,10 @@ const ServiceForm = ({ userId, handleClose, onSubmitSuccess }) => {
               fontSize: "14px",
               mt: { md: 2 },
               background: theme.palette.secondary.light,
-              color: theme.palette.secondary.dark,
+              color: "#fff",
               "&:hover": {
-                background: theme.palette.secondary.dark,
-                color: theme.palette.orange.main,
+                background: theme.palette.secondary.main,
+                color: "#fff",
               },
             }}
           >

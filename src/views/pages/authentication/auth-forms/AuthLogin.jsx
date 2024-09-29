@@ -205,6 +205,14 @@ const AuthLogin = ({ ...others }) => {
                   type="submit"
                   variant="contained"
                   color="secondary"
+                  sx={{
+                    backgroundColor: theme.palette.secondary.main,
+                    color: "#fff",
+                    "&:hover": {
+                      background: theme.palette.success.dark,
+                      color: "#fff",
+                    },
+                  }}
                 >
                   Sign in
                 </Button>
