@@ -14,7 +14,7 @@ const other = {
       id: "about",
       title: "Bantuan",
       type: "item",
-      url: "https://wa.me/08",
+      url: "https://wa.me/62811465114",
       icon: icons.IconZoomExclamation,
       breadcrumbs: false,
       target: "_blank",
