@@ -14,11 +14,9 @@ import {
 import MainCard from "../../ui-component/cards/MainCard";
 import SubCard from "../../ui-component/cards/SubCard";
 import { getVehicle } from "../../service/vehicle.service";
-import { getDashboard } from "../../service/dashboard.service"; // Pastikan import ini benar
+import { getDashboard } from "../../service/dashboard.service";
+import { getListPromotion } from "../../service/listPromotion.service";
 import Carousel from "react-material-ui-carousel";
-import image1 from "../../assets/images/edukasi.jpeg";
-import image2 from "../../assets/images/edukasi3.jpeg";
-import image3 from "../../assets/images/edukasi2.jpeg";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
@@ -32,7 +30,8 @@ const renderStatusIcon = (status) => {
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
-  const [surveyLink, setSurveyLink] = useState(""); // State untuk menyimpan link survey
+  const [promotion, setListPromotion] = useState([]);
+  const [surveyLink, setSurveyLink] = useState("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
 
@@ -43,7 +42,12 @@ const VehicleList = () => {
     });
 
     getDashboard((data) => {
-      setSurveyLink(data.value); // Simpan link ke state
+      setSurveyLink(data.value);
+    });
+
+    // Fetch promotion images from API
+    getListPromotion((data) => {
+      setListPromotion(data); // Simpan data promosi
     });
   }, []);
 
@@ -53,7 +57,7 @@ const VehicleList = () => {
 
   const handleSurveyClick = () => {
     if (surveyLink) {
-      window.open(surveyLink, "_blank"); // Gunakan link dari state
+      window.open(surveyLink, "_blank");
     } else {
       console.error("Survey link is not available");
     }
@@ -75,21 +79,31 @@ const VehicleList = () => {
           >
             <Typography
               variant="body1"
-              sx={{ fontWeight: "bold", fontSize: "32px", mb: 2 }}
+              sx={{
+                fontWeight: "bold",
+                fontSize: { md: "38px", xs: "30px" },
+                mb: 4.5,
+                mt: 2,
+              }}
             >
               Upload Foto <br /> & Beri Review <br />
               Terbaikmu!
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: "16px" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontSize: { md: "18px", xs: "14px" }, mb: 2 }}
+            >
               Upload Foto Anda selama berada di Dealer, berikan komentar terbaik
               Anda, & dapatkan 13 Kemudahan Pelanggan Kalla Toyota!
             </Typography>
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 3 }} />
             <Typography>
               <Button
                 variant="contained"
                 onClick={handlePromoteNowClick}
-                sx={{ background: theme.palette.primary.dark }}
+                sx={{
+                  background: theme.palette.primary.dark,
+                }}
               >
                 Promote Now
               </Button>
@@ -107,17 +121,25 @@ const VehicleList = () => {
           >
             <Typography
               variant="body1"
-              sx={{ fontWeight: "bold", fontSize: "32px", mb: 2 }}
+              sx={{
+                fontWeight: "bold",
+                fontSize: { md: "38px", xs: "30px" },
+                mb: 4.5,
+                mt: 2,
+              }}
             >
               Isi Surveynya
               <br /> Dapatkan Hadiahnya!
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: "16px" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontSize: { md: "18px", xs: "14px" }, mb: 2 }}
+            >
               Bantu kami agar dapat memahami kebutuhan Anda dengan baik,
               selesaikan Survey Kepuasan Pelanggan berikut dan dapatkan Freebies
               saat Service Pertama!
             </Typography>
-            <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 3 }} />
             <Typography>
               <Button
                 variant="contained"
@@ -135,39 +157,25 @@ const VehicleList = () => {
           <Carousel
             navButtonsAlwaysVisible
             sx={{
-              width: "100%", // Adjust width as needed
-              height: "100%", // Adjust height if needed
-              mb: 2, // Margin bottom for spacing
+              width: "100%",
+              height: "100%",
+              mb: 2,
             }}
           >
-            <Card>
-              <CardMedia
-                component="img"
-                height="100%"
-                image={image1}
-                alt="Image 1"
-              />
-            </Card>
-            <Card>
-              <CardMedia
-                component="img"
-                height="100%"
-                image={image2}
-                alt="Image 2"
-              />
-            </Card>
-            <Card>
-              <CardMedia
-                component="img"
-                height="100%"
-                image={image3}
-                alt="Image 3"
-              />
-            </Card>
+            {promotion.map((promo) => (
+              <Card key={promo.id}>
+                <CardMedia
+                  component="img"
+                  height="100%"
+                  image={promo.image_path} // Menggunakan gambar dari API
+                  alt={`Promotion ${promo.id}`}
+                />
+              </Card>
+            ))}
           </Carousel>
         </Grid>
         {/* Divider for separating slider and subcards */}
-        <Divider sx={{ my: 2, width: "100%" }} /> {/* Full-width divider */}
+        <Divider sx={{ my: 2, width: "100%" }} />
         {/* Vehicle SubCard Section */}
         <Grid container spacing={2}>
           {vehicles.map((vehicle) => (
@@ -182,105 +190,103 @@ const VehicleList = () => {
                   cursor: "pointer",
                 }}
               >
-                <Typography color="textSecondary">
+                <Typography
+                  color="textSecondary"
+                  sx={{
+                    textAlign: "center",
+                    fontSize: { xs: "14px", md: "inherit" },
+                  }} // Adjust text size for mobile
+                >
                   No. Polisi: {vehicle.police_number}
                 </Typography>
-                <Grid container spacing={2} mt={2}>
+                <Grid container spacing={2} mt={2} justifyContent="center">
                   {/* Row 1 */}
-                  <Grid container item xs={12} spacing={2}>
-                    <Grid item xs={4} display="flex" alignItems="center">
-                      <Tooltip
-                        title={
-                          vehicle.bstb ? "BSTB available" : "BSTB not available"
-                        }
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    spacing={2}
+                    direction={isMobile ? "column" : "row"}
+                  >
+                    {[
+                      { label: "BSTB", status: vehicle.bstb },
+                      { label: "Leasing", status: vehicle.leasing },
+                      { label: "Asurance", status: vehicle.asurance },
+                    ].map((item, index) => (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        display="flex"
+                        alignItems="center"
+                        key={index}
                       >
-                        <IconButton>
-                          {renderStatusIcon(vehicle.bstb)}
-                        </IconButton>
-                      </Tooltip>
-                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
-                        BSTB
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} display="flex" alignItems="center">
-                      <Tooltip
-                        title={
-                          vehicle.leasing
-                            ? "Leasing available"
-                            : "Leasing not available"
-                        }
-                      >
-                        <IconButton>
-                          {renderStatusIcon(vehicle.leasing)}
-                        </IconButton>
-                      </Tooltip>
-                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
-                        Leasing
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} display="flex" alignItems="center">
-                      <Tooltip
-                        title={
-                          vehicle.asurance
-                            ? "Asurance available"
-                            : "Asurance not available"
-                        }
-                      >
-                        <IconButton>
-                          {renderStatusIcon(vehicle.asurance)}
-                        </IconButton>
-                      </Tooltip>
-                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
-                        Asurance
-                      </Typography>
-                    </Grid>
+                        <Tooltip
+                          title={
+                            item.status
+                              ? `${item.label} available`
+                              : `${item.label} not available`
+                          }
+                        >
+                          <IconButton>
+                            {renderStatusIcon(item.status)}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography
+                          sx={{
+                            ml: { xs: 0, md: 1 },
+                            textAlign: "center",
+                            fontSize: { xs: "14px", md: "inherit" },
+                          }}
+                        >
+                          {item.label}
+                        </Typography>
+                      </Grid>
+                    ))}
                   </Grid>
                   {/* Row 2 */}
-                  <Grid container item xs={12} spacing={2}>
-                    <Grid item xs={4} display="flex" alignItems="center">
-                      <Tooltip
-                        title={
-                          vehicle.certificate
-                            ? "Certificate available"
-                            : "Certificate not available"
-                        }
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    spacing={2}
+                    direction={isMobile ? "column" : "row"}
+                  >
+                    {[
+                      { label: "Certificate", status: vehicle.certificate },
+                      { label: "STNK", status: vehicle.stnk },
+                      { label: "BPKB", status: vehicle.bpkb },
+                    ].map((item, index) => (
+                      <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        display="flex"
+                        alignItems="center"
+                        key={index}
                       >
-                        <IconButton>
-                          {renderStatusIcon(vehicle.certificate)}
-                        </IconButton>
-                      </Tooltip>
-                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
-                        Certificate
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} display="flex" alignItems="center">
-                      <Tooltip
-                        title={
-                          vehicle.stnk ? "STNK available" : "STNK not available"
-                        }
-                      >
-                        <IconButton>
-                          {renderStatusIcon(vehicle.stnk)}
-                        </IconButton>
-                      </Tooltip>
-                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
-                        STNK
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={4} display="flex" alignItems="center">
-                      <Tooltip
-                        title={
-                          vehicle.bpkb ? "BPKB available" : "BPKB not available"
-                        }
-                      >
-                        <IconButton>
-                          {renderStatusIcon(vehicle.bpkb)}
-                        </IconButton>
-                      </Tooltip>
-                      <Typography sx={{ ml: { xs: 0, md: 1 } }}>
-                        BPKB
-                      </Typography>
-                    </Grid>
+                        <Tooltip
+                          title={
+                            item.status
+                              ? `${item.label} available`
+                              : `${item.label} not available`
+                          }
+                        >
+                          <IconButton>
+                            {renderStatusIcon(item.status)}
+                          </IconButton>
+                        </Tooltip>
+                        <Typography
+                          sx={{
+                            ml: { xs: 0, md: 1 },
+                            textAlign: "center",
+                            fontSize: { xs: "14px", md: "inherit" },
+                          }}
+                        >
+                          {item.label}
+                        </Typography>
+                      </Grid>
+                    ))}
                   </Grid>
                 </Grid>
               </SubCard>
